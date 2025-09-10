@@ -1,0 +1,31 @@
+<div class="min-h-screen bg-gray-100 flex flex-col md:flex-row">
+  <%= render "shared/sidebar" %>
+
+  <div class="flex-1 flex flex-col">
+    <%= render "shared/navbar" %>
+
+    <main class="p-4 md:p-6">
+      <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
+        <!-- Title -->
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">
+          <%= @profile_setting.company_name %>
+        </h2>
+
+        <!-- Details -->
+        <p><strong>Address:</strong> <%= @profile_setting.address %></p>
+        <p><strong>GST Number:</strong> <%= @profile_setting.gst_number %></p>
+        <p><strong>Email:</strong> <%= @profile_setting.email %></p>
+        <p><strong>Phone:</strong> <%= @profile_setting.phone %></p>
+        <p><strong>Created At:</strong> <%= @profile_setting.created_at.strftime("%d %b %Y, %I:%M %p") %></p>
+        <p><strong>Last Updated:</strong> <%= @profile_setting.updated_at.strftime("%d %b %Y, %I:%M %p") %></p>
+
+        <!-- Actions -->
+        <div class="mt-6 flex space-x-2">
+          <%= link_to "Back", profile_settings_path, class: "bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" %>
+          <%= link_to "Edit", edit_profile_setting_path(@profile_setting), class: "bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" %>
+          <%= link_to "Delete", profile_setting_path(@profile_setting), method: :delete, data: { confirm: "Are you sure?" }, class: "bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700" %>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

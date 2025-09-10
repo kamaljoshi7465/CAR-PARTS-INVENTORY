@@ -31,6 +31,14 @@
       "Edit Member"
     elsif controller_name == "members" && action_name == "show"
       "Member Details"
+    elsif controller_name == "profile_settings" && action_name == "index"
+      "Profiles List"
+    elsif controller_name == "profile_settings" && action_name == "new"
+      "Add New Profile"
+    elsif controller_name == "profile_settings" && action_name == "edit"
+      "Edit Profile"
+    elsif controller_name == "profile_settings" && action_name == "show"
+      "Profile Details"
     else
       "Dashboard Panel"
     end %>

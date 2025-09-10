@@ -1,0 +1,56 @@
+<div class="min-h-screen bg-gray-100 flex flex-col md:flex-row">
+  <!-- Sidebar -->
+  <%= render "shared/sidebar" %>
+
+  <div class="flex-1 flex flex-col">
+    <!-- Navbar -->
+    <%= render "shared/navbar" %>
+
+    <main class="p-4 md:p-6">
+      <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
+        <%= form_with(model: @profile_setting, local: true, class: "space-y-6") do |form| %>
+          <% if @profile_setting.errors.any? %>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+              <strong class="font-bold"><%= pluralize(@profile_setting.errors.count, "error") %>:</strong>
+              <ul class="mt-2 list-disc list-inside">
+                <% @profile_setting.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div>
+            <%= form.label :company_name, class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_field :company_name, class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+          </div>
+
+          <div>
+            <%= form.label :address, class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_area :address, rows: 3, class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+          </div>
+
+          <div>
+            <%= form.label :gst_number, class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_field :gst_number, class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+          </div>
+
+          <div>
+            <%= form.label :email, class: "block text-sm font-medium text-gray-700" %>
+            <%= form.email_field :email, class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+          </div>
+
+          <div>
+            <%= form.label :phone, class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_field :phone, class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <%= link_to "Back to profile", profile_settings_path, class: "bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition" %>
+            <%= form.submit "Create", class: "bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition" %>
+          </div>
+        <% end %>
+      </div>
+    </main>
+  </div>
+</div>
