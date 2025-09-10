@@ -1,0 +1,15 @@
+<div class="min-h-screen bg-gray-100 flex flex-col md:flex-row">
+  <!-- Sidebar -->
+  <%= render "shared/sidebar" %>
+  <div class="flex-1 flex flex-col">
+    <!-- Navbar -->
+    <%= render "shared/navbar" %>
+    <main class="p-4 md:p-6">
+      <div class="mt-6 md:mt-10 bg-white rounded-lg shadow-md p-4 md:p-6">
+        <div class="w-full px-6">
+          <%= render "invoices/form" %>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

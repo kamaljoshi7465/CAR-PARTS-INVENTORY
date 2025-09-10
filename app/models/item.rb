@@ -3,6 +3,8 @@ class Item < ApplicationRecord
 
   has_many :orders
   has_many :members, through: :orders
+  has_many :invoice_items
+  has_many :invoices, through: :invoice_items
 
   STATUSES = %w[tracked available unavailable]
 

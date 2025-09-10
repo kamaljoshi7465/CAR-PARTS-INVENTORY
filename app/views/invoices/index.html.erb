@@ -1,0 +1,50 @@
+<div class="min-h-screen bg-gray-100 flex flex-col md:flex-row">
+  <!-- Sidebar -->
+  <%= render "shared/sidebar" %>
+  <div class="flex-1 flex flex-col">
+    <!-- Navbar -->
+    <%= render "shared/navbar" %>
+    <main class="p-4 md:p-6">
+      <div class="w-full">
+        <div class="flex justify-between items-center mb-4">
+          <h1 class="text-xl font-bold text-gray-800"></h1>
+          <%= link_to "Add New Invoice", new_invoice_path, 
+              class: "bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition text-sm font-medium" %>
+        </div>
+        <div class="overflow-x-auto bg-white rounded shadow">
+          <table class="w-full border-gray-200 shadow-lg rounded-lg overflow-hidden border-t-black">
+            <thead class="bg-gray-100 text-black">
+              <tr>
+                <th class="px-6 py-3 text-left text-sm font-semibold">ID</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Customer</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Total</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Created</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold flex justify-center">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <% @invoices.each do |invoice| %>
+                <tr>
+                  <td class="px-6 py-4"><%= invoice.id %></td>
+                  <td class="px-6 py-4"><%= invoice.customer_name %></td>
+                  <td class="px-6 py-4"><%= invoice.total_price %></td>
+                  <td class="px-6 py-4"><%= invoice.created_at.strftime("%d %b %Y") %></td>
+                  <td class="px-6 py-3 space-x-1">
+                    <div class="flex space-x-2 justify-center">
+                      <%= link_to "Show", invoice_path(invoice), class: "inline-block bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition text-sm" %>
+                    <%= link_to "Edit", edit_invoice_path(invoice), class: "inline-block bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition text-sm" %>
+                      <%= button_to "Delete", invoice_path(invoice), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "inline-block bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700 transition text-sm" %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <%# if @invoices.empty? && params[:q].present? %>
+          <%# <p class="text-center text-gray-600 mt-4">No items found for "= params[:q]"</p> %>
+          <%# end %>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

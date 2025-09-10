@@ -70,3 +70,4 @@ gem "tailwindcss-rails", "~> 4.3"
 
 gem "devise"
 gem 'paranoia'
+gem 'htmlbeautifier'

@@ -19,11 +19,15 @@
       <i class="fas fa-plus-circle mr-3"></i> Add Item
     <% end %>
 
+    <%= link_to invoices_path, class: "flex items-center px-6 py-2 #{controller_name == 'invoices'  ? 'bg-gray-300 font-semibold' : 'text-gray-700 hover:bg-gray-200'}" do %>
+      <i class="fas fa-file-invoice mr-3"></i> Invoice
+    <% end %>
+
     <%= link_to new_member_path, class: "flex items-center px-6 py-2 #{controller_name == 'members' ? 'bg-gray-300 font-semibold' : 'text-gray-700 hover:bg-gray-200'}" do %>
       <i class="fas fa-user-plus mr-3"></i> Add Member
     <% end %>
 
-    <%= link_to new_profile_setting_path, class: "flex items-center px-6 py-2 #{controller_name == 'profile_settings' ? 'bg-gray-300 font-semibold' : 'text-gray-700 hover:bg-gray-200'}" do %>
+    <%= link_to profile_settings_path, class: "flex items-center px-6 py-2 #{controller_name == 'profile_settings' ? 'bg-gray-300 font-semibold' : 'text-gray-700 hover:bg-gray-200'}" do %>
       <i class="fas fa-user-circle mr-3"></i> Profile
     <% end %>
 

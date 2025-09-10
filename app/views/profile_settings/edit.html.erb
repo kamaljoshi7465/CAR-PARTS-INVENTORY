@@ -7,7 +7,7 @@
     <%= render "shared/navbar" %>
 
     <main class="p-4 md:p-6">
-      <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
+      <div class="max-w-full mx-auto bg-white shadow-lg rounded-lg p-6">
         <%= form_with(model: @profile_setting, local: true, class: "space-y-6") do |form| %>
           <% if @profile_setting.errors.any? %>
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">

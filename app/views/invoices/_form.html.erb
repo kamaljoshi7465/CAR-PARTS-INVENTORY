@@ -1,0 +1,208 @@
+<%= form_with(model: @invoice, local: true) do |form| %>
+  <% if @invoice.errors.any? %>
+    <div class="mb-4 p-4 bg-red-100 text-red-700 rounded">
+      <h2 class="font-bold">Please fix the following errors:</h2>
+      <ul class="list-disc list-inside">
+        <% @invoice.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <!-- Customer Name -->
+  <div class="mb-4">
+    <%= form.label :customer_name, class: "block text-gray-700 font-semibold" %>
+    <%= form.text_field :customer_name,
+      class: "mt-1 py-2 px-2 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 border",
+      placeholder: "Enter Customer Name" %>
+  </div>
+  <!-- Items Section -->
+  <h3 class="text-lg font-semibold mb-2">Invoice Items</h3>
+  <div id="invoice-items">
+    <%= form.fields_for :invoice_items do |item_form| %>
+      <div class="invoice-item mb-4 p-2 border border-gray-300 rounded-lg flex flex-col sm:flex-row sm:items-center sm:space-x-2">
+        <!-- Searchable Dropdown -->
+        <div class="md:w-2/4 sm:w-1/2 mb-2 sm:mb-0">
+          <div class="searchable-dropdown relative w-full">
+            <!-- input: explicit text-left + inline style to be extra-safe -->
+            <input type="text"
+           placeholder="Search items..."
+           class="search-input w-full p-2 border rounded focus:outline-none text-left"
+           style="text-align: left;"
+           onkeyup="filterDropdown(this)"
+           onclick="showDropdown(this)" />
+            <!-- list: text-left and left-aligned content -->
+            <div class="dropdown-list max-h-40 overflow-y-auto hidden border rounded absolute bg-white w-full z-10 text-left"
+         style="text-align: left;">
+              <% Item.all.each do |i| %>
+                <div class="dropdown-item p-2 hover:bg-blue-100 cursor-pointer text-left"
+             data-value="<%= i.id %>"
+             onclick="selectItem(this)">
+                  <%= i.name %> (Stock: <%= i.quantity %>)
+                </div>
+              <% end %>
+            </div>
+            <!-- Hidden field to hold item_id -->
+            <%= item_form.hidden_field :item_id, class: "selected-item-id" %>
+          </div>
+        </div>
+        <!-- Quantity -->
+        <div class="md:w-1/4 sm:w-1/6 mb-2 sm:mb-0">
+          <%= item_form.number_field :quantity, min: 1,
+            class: "w-full border border-gray-300 p-2 rounded",
+            placeholder: "Qty" %>
+        </div>
+        <!-- Price -->
+        <div class="md:w-1/4 sm:w-1/6 mb-2 sm:mb-0">
+          <%= item_form.number_field :price, step: 0.01,
+            class: "w-full border border-gray-300 p-2 rounded",
+            placeholder: "Price" %>
+        </div>
+        <!-- Remove Button -->
+        <div class="w-full sm:w-auto">
+          <button type="button"
+            class="remove-item bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 w-full sm:w-auto">
+            Remove
+          </button>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <!-- Add Item Button -->
+  <button type="button" id="add-item"
+    class="mt-2 bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
+    + Add Item
+  </button>
+  <!-- Submit + Back -->
+  <div class="flex justify-end space-x-2 mt-6">
+    <%= form.submit "Create Invoice", class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition" %>
+    <%= link_to "Back to Invoices", invoices_path,
+      class: "bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition" %>
+  </div>
+<% end %>
+<!-- Hidden Template for New Item Row -->
+<template id="invoice-item-template">
+  <div class="invoice-item mb-4 p-2 border border-gray-300 rounded-lg flex flex-col sm:flex-row sm:items-center sm:space-x-2">
+    <!-- Searchable Dropdown -->
+    <div class="md:w-2/4 sm:w-1/2 mb-2 sm:mb-0">
+      <div class="searchable-dropdown relative w-full">
+        <input type="text"
+               placeholder="Search items..."
+               class="search-input w-full p-2 border rounded focus:outline-none"
+               onkeyup="filterDropdown(this)"
+               onclick="showDropdown(this)" />
+        <div class="dropdown-list max-h-40 overflow-y-auto hidden border rounded absolute bg-white w-full z-10">
+          <% Item.all.each do |i| %>
+            <div class="dropdown-item p-2 hover:bg-blue-100 cursor-pointer"
+                 data-value="<%= i.id %>"
+                 onclick="selectItem(this)">
+              <%= i.name %> (Stock: <%= i.quantity %>)
+            </div>
+          <% end %>
+        </div>
+        <!-- Hidden field to hold item_id -->
+        <input type="hidden" name="invoice[invoice_items_attributes][NEW_RECORD][item_id]" class="selected-item-id">
+      </div>
+    </div>
+    <!-- Quantity -->
+    <div class="md:w-1/4 sm:w-1/6 mb-2 sm:mb-0">
+      <input type="number" name="invoice[invoice_items_attributes][NEW_RECORD][quantity]"
+        min="1" class="w-full border border-gray-300 p-2 rounded" placeholder="Qty">
+    </div>
+    <!-- Price -->
+    <div class="md:w-1/4 sm:w-1/6 mb-2 sm:mb-0">
+      <input type="number" step="0.01" name="invoice[invoice_items_attributes][NEW_RECORD][price]"
+        class="w-full border border-gray-300 p-2 rounded" placeholder="Price">
+    </div>
+    <!-- Remove Button -->
+    <div class="w-full sm:w-auto">
+      <button type="button"
+        class="remove-item bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 w-full sm:w-auto">
+        Remove
+      </button>
+    </div>
+  </div>
+</template>
+<!-- Scripts -->
+<script>
+  // Call this on page load and when adding rows (you already have add/remove handlers)
+  function showDropdown(input) {
+    const dropdown = input.nextElementSibling;
+    if (!dropdown) return;
+    dropdown.classList.remove("hidden");
+
+    // reset display for all items (show all)
+    dropdown.querySelectorAll('.dropdown-item').forEach(it => it.style.display = "");
+
+    // make sure input is left-aligned (safety for CSS overrides)
+    input.classList.remove('text-center');
+    input.classList.add('text-left');
+    input.style.textAlign = 'left';
+  }
+
+  function filterDropdown(input) {
+    const dropdown = input.nextElementSibling;
+    if (!dropdown) return;
+    dropdown.classList.remove("hidden");
+    const filter = input.value.toLowerCase();
+    const items = dropdown.querySelectorAll(".dropdown-item");
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = text.includes(filter) ? "" : "none";
+    });
+
+    // ensure left alignment as user types
+    input.classList.remove('text-center');
+    input.classList.add('text-left');
+    input.style.textAlign = 'left';
+  }
+
+  function selectItem(element) {
+    const dropdown = element.closest(".dropdown-list");
+    const searchInput = dropdown.previousElementSibling;
+    const hiddenInput = dropdown.parentElement.querySelector(".selected-item-id");
+
+    // set selected text and hidden value
+    searchInput.value = element.textContent.trim();
+    hiddenInput.value = element.dataset.value;
+
+    // force left align the visible text
+    searchInput.classList.remove('text-center');
+    searchInput.classList.add('text-left');
+    searchInput.style.textAlign = 'left';
+
+    dropdown.classList.add("hidden");
+  }
+
+  document.addEventListener("click", (e) => {
+    document.querySelectorAll(".dropdown-list").forEach(list => {
+      if (!list.parentElement.contains(e.target)) {
+        list.classList.add("hidden");
+      }
+    });
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const addBtn = document.getElementById("add-item");
+    const container = document.getElementById("invoice-items");
+    const template = document.getElementById("invoice-item-template").innerHTML;
+
+    let index = Date.now(); // ensures unique keys
+
+    addBtn.addEventListener("click", () => {
+      // create a fresh row from template and replace NEW_RECORD with unique index
+      let newRow = template.replace(/NEW_RECORD/g, index++);
+      container.insertAdjacentHTML("beforeend", newRow);
+    });
+
+    // handle remove button
+    container.addEventListener("click", (e) => {
+      if (e.target.classList.contains("remove-item")) {
+        const row = e.target.closest(".invoice-item");
+        if (row && container.querySelectorAll(".invoice-item").length > 1) {
+          row.remove();
+        }
+      }
+    });
+  });
+</script>

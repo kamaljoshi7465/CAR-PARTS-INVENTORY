@@ -13,4 +13,9 @@ Rails.application.routes.draw do
   resources :orders
   resources :members
   resources :profile_settings
+  resources :invoices do
+    collection do
+      get :search_items
+    end
+  end
 end
