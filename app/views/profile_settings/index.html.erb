@@ -1,0 +1,54 @@
+<div class="min-h-screen bg-gray-100 flex flex-col md:flex-row">
+  <%= render "shared/sidebar" %>
+
+  <div class="flex-1 flex flex-col">
+    <%= render "shared/navbar" %>
+
+    <main class="p-4 md:p-6">
+      <div class="w-full">
+        <div class="flex justify-between items-center mb-4">
+          <%= link_to "New Profile", new_profile_setting_path, class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition" %>
+        </div>
+
+        <div class="overflow-x-auto bg-white rounded shadow">
+          <table class="w-full border-gray-200 shadow-lg rounded-lg overflow-hidden">
+            <thead class="bg-gray-100 text-black">
+              <tr>
+                <th class="px-6 py-3 text-left text-sm font-semibold">ID</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Company Name</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Address</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">GST</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Email</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Phone</th>
+                <th class="px-6 py-3 text-center text-sm font-semibold">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <% @profile_settings.each do |setting| %>
+                <tr>
+                  <td class="px-6 py-4"><%= setting.id %></td>
+                  <td class="px-6 py-4"><%= setting.company_name %></td>
+                  <td class="px-6 py-4"><%= setting.address %></td>
+                  <td class="px-6 py-4"><%= setting.gst_number %></td>
+                  <td class="px-6 py-4"><%= setting.email %></td>
+                  <td class="px-6 py-4"><%= setting.phone %></td>
+                  <td class="px-6 py-3">
+                    <div class="flex space-x-2 justify-center">
+                      <%= link_to "Show", profile_setting_path(setting), class: "bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm" %>
+                      <%= link_to "Edit", edit_profile_setting_path(setting), class: "bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm" %>
+                      <%= button_to "Delete", profile_setting_path(setting), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-sm" %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+
+          <% if @profile_settings.empty? %>
+            <p class="text-center text-gray-600 mt-4">No profile settings found.</p>
+          <% end %>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

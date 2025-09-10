@@ -4,6 +4,7 @@ require "faker"
 Order.destroy_all
 Item.destroy_all
 Member.destroy_all
+ProfileSetting.destroy_all
 User.destroy_all
 
 puts "🌱 Seeding database..."
@@ -44,6 +45,18 @@ orders = 10.times.map do
   )
 end
 puts "✅ Created #{orders.count} orders"
+
+# Create 10 profile settings
+profile_settings = 10.times.map do
+  ProfileSetting.create!(
+    company_name: Faker::Company.name,
+    address: Faker::Address.full_address,
+    gst_number: Faker::Alphanumeric.alphanumeric(number: 15).upcase,
+    email: Faker::Internet.unique.email,
+    phone: Faker::Number.number(digits: 10)
+  )
+end
+puts "✅ Created #{profile_settings.count} profile settings"
 
 # Create admin user
 user = User.find_or_create_by!(email: "admin@example.com") do |u|
